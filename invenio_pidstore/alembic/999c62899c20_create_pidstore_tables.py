@@ -32,6 +32,9 @@ def upgrade():
     op.create_index(
         "idx_object", "pidstore_pid", ["object_type", "object_uuid"], unique=False
     )
+    op.create_index(
+        "idx_pidstore_pid_value", "pidstore_pid", ["pid_value"], unique=False, if_not_exists=True
+    )
     op.create_index("idx_status", "pidstore_pid", ["status"], unique=False)
     op.create_index(
         "uidx_type_pid", "pidstore_pid", ["pid_type", "pid_value"], unique=True
@@ -59,6 +62,7 @@ def downgrade():
     op.drop_table("pidstore_redirect")
     op.drop_table("pidstore_recid")
     op.drop_index("uidx_type_pid", table_name="pidstore_pid")
+    op.drop_index("idx_pidstore_pid_value", table_name="pidstore_pid", if_exists=True)
     op.drop_index("idx_status", table_name="pidstore_pid")
     op.drop_index("idx_object", table_name="pidstore_pid")
     op.drop_table("pidstore_pid")

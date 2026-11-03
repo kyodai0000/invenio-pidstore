@@ -90,6 +90,7 @@ class PersistentIdentifier(db.Model, db.Timestamp):
     __tablename__ = "pidstore_pid"
     __table_args__ = (
         db.Index("uidx_type_pid", "pid_type", "pid_value", unique=True),
+        db.Index("idx_pidstore_pid_value", "pid_value"),
         db.Index("idx_status", "status"),
         db.Index("idx_object", "object_type", "object_uuid"),
     )
