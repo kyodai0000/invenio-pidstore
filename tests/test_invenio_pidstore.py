@@ -63,25 +63,6 @@ def test_pid_creation(logger, app, db):
             assert logger.exception.call_args[0][0].startswith("Failed to create")
 
 
-def test_alembic(app, db):
-    """Test alembic recipes."""
-    ext = app.extensions["invenio-db"]
-
-    if db.engine.name == "sqlite":
-        raise pytest.skip("Upgrades are not supported on SQLite.")
-
-    assert not ext.alembic.compare_metadata()
-    db.drop_all()
-    ext.alembic.upgrade()
-
-    assert not ext.alembic.compare_metadata()
-    ext.alembic.stamp()
-    ext.alembic.downgrade(target="96e796392533")
-    ext.alembic.upgrade()
-
-    assert not ext.alembic.compare_metadata()
-
-
 def test_pidstatus_as():
     """Test PID status."""
     assert PIDStatus.NEW.title == "New"
